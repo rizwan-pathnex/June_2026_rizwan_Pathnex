@@ -1,0 +1,11 @@
+# What I did today
+
+1-Today, learn some imp k8s topic such as aws eks,pods,Namespace,deployments, cluster ip,Nordpod,woker node
+
+# Tomorrow's Task
+
+1-Need to cover again k8 3 classes.
+
+2-Need to do hard practice for introduction video
+
+
