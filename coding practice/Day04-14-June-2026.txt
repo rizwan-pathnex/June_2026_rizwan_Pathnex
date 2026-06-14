@@ -32,3 +32,18 @@ resource "aws_instance" "rizwan" {
     Name = "self"
   }
 }
+
+
+
+#Kubernetes — Create ClusterIP Service
+
+apiVersion: v1
+kind: service
+metadata:
+  name: rizwan-service
+ spec:
+   selector:
+     app: rizwan-app
+    port:
+      - port: 80
+        target: 80
