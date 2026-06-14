@@ -47,3 +47,25 @@ metadata:
     port:
       - port: 80
         target: 80
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Parallel Test') {
+            parallel {
+                stage('Build') {
+                    steps {
+                        sh 'mvn clean compile'
+                    }
+                }
+
+                stage('Test') {
+                    steps {
+                        sh 'mvn test'
+                    }
+                }
+            }
+        }
+    }
+}
