@@ -1,0 +1,18 @@
+# What I Did Today
+
+* Learned Kubernetes troubleshooting through real-world scenarios.
+* Set up Kubernetes using both Terraform and manual deployment methods.
+* Practiced destroying and deleting the infrastructure after deployment.
+* Prepared an introduction video and shared it on the Telegram channel.
+
+#Tomorrow's Tasks
+
+* Complete the pending Kubernetes content.
+* Watch the Kubernetes videos from April and May.
+
+
+## Notes
+
+* Around two weeks are left to complete the course.
+* Need to stay focused, practice consistently and prepare strongly to finish on time.
+
