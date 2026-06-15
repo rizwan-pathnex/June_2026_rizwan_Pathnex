@@ -1,0 +1,71 @@
+
+# Ansible Code
+
+- name: Install package for pathnex
+  hosts: all
+  become: yes
+  
+  tasks:
+    - name: install tools
+      yum:
+        name:
+          -git
+           -wget
+         state: present
+
+# Terraform
+
+provider "aws"{
+  region= "us-east-1"
+}
+resource "aws_key_pair" "rizwankey"{
+
+  key_name   = "rizwan-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0wuieuyturthhEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVojsrhuerhuhBK41 email@example.com"
+}
+
+resource "aws_instance" "rizwan" {
+  ami           = "ami-0abcd1234abcd1234"
+  instance_type = "t3.small"
+  key_name = aws_key_pair.rizwankey.key_name
+  tags = {
+    Name = "self"
+  }
+}
+
+
+
+#Kubernetes — Create ClusterIP Service
+
+apiVersion: v1
+kind: service
+metadata:
+  name: rizwan-service
+ spec:
+   selector:
+     app: rizwan-app
+    port:
+      - port: 80
+        target: 80
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Parallel Test') {
+            parallel {
+                stage('Build') {
+                    steps {
+                        sh 'mvn clean compile'
+                    }
+                }
+
+                stage('Test') {
+                    steps {
+                        sh 'mvn test'
+                    }
+                }
+            }
+        }
+    }
+}
