@@ -1,0 +1,9 @@
+
+             What I did today
+Prepared an introduction video
+Created an EKS cluster manually and using Terraform
+Watched Pathnex Linux and Kubernetes Class 1 video
+
+              Tomorrow’s Task
+Learn Kubernetes architecture and practice it thoroughly
+Revise Helm charts
