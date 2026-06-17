@@ -8,4 +8,4 @@
 #Tomorrow’s Task*
 
 * Learn Kubernetes architecture and practice it thoroughly.
-
+* Need hard work with into video
