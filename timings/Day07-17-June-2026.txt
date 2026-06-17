@@ -1,0 +1,11 @@
+#What I Did Today**
+
+* Learned about Argo CD. Argo CD is a tool that automatically deploys applications to Kubernetes. It continuously monitors a Git repository and deploys the latest changes whenever it detects updates in the code or manifest files. It also provides features such as live monitoring of clusters and pods, and makes rollbacks easy.
+* Prepared an introduction video.
+* Tried to create an EKS cluster manually and using Terraform.
+* Watched Pathnex Linux and Kubernetes Class 2 video.
+
+#Tomorrow’s Task*
+
+* Learn Kubernetes architecture and practice it thoroughly.
+
