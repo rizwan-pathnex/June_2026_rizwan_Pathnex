@@ -1,0 +1,11 @@
+# What I Did Today
+
+* Learned about Helm charts.
+* Prepared for the mock interview, but I could not attend because the microphone was not working on both my laptop and mobile phone.
+* The most important takeaway is the need to maintain confidence during interviews.
+
+# Tomorrow's Tasks
+
+* Improve my self-introduction.
+* Practice Terraform, Jenkins, and Kubernetes .
+* Review Kubernetes architecture and core concepts.
