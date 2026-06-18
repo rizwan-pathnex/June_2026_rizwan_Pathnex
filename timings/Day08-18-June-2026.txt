@@ -1,0 +1,16 @@
+
+#  What I Did Today**
+* Prepared an introduction video.
+* Learn basic Structure of Terraform and some common cmd:-
+  terraform init      # Initialize working directory
+  terraform validate  # Validate configuration
+  terraform fmt       # Format code
+  terraform plan      # Preview changes
+  terraform apply     # Create/update infrastructure
+  terraform destroy   # Remove infrastructure
+  terraform show      # Show current state
+
+#   Tomorrow’s Task*
+
+* Learn Kubernetes architecture and and need to watch may and june terraform video.
+* Need hard work with into video
