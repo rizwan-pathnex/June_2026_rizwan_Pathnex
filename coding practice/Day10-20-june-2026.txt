@@ -1,0 +1,184 @@
+=================================================
+ANSIBLE PLAYBOOK
+=================================================
+
+---
+- name: Install tools based on OS
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Install htop on RedHat
+      ansible.builtin.yum:
+        name: htop
+        state: present
+      when: ansible_facts.os_family == "RedHat"
+
+
+    - name: Install htop on Debian
+      ansible.builtin.apt:
+        name: htop
+        state: present
+        update_cache: yes
+      when: ansible_facts.os_family == "Debian"
+
+
+
+=================================================
+TERRAFORM ROUTE TABLE
+=================================================
+
+resource "aws_route_table" "main_rt" {
+
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "main-route-table"
+  }
+}
+
+
+resource "aws_route" "internet" {
+
+  route_table_id = aws_route_table.main_rt.id
+
+  destination_cidr_block = "0.0.0.0/0"
+
+  gateway_id = aws_internet_gateway.main.id
+}
+
+
+resource "aws_route_table_association" "assoc" {
+
+  subnet_id = aws_subnet.public.id
+
+  route_table_id = aws_route_table.main_rt.id
+}
+
+
+
+=================================================
+KUBERNETES SECRET
+=================================================
+
+apiVersion: v1
+kind: Secret
+
+metadata:
+  name: app-secret
+
+type: Opaque
+
+stringData:
+  username: admin
+  password: pathnex123
+
+
+
+=================================================
+SHELL SCRIPT
+=================================================
+
+#!/bin/bash
+
+
+for i in {1..10}
+do
+
+ echo "Number: $i"
+
+done
+
+
+
+=================================================
+JENKINS PIPELINE
+=================================================
+
+pipeline {
+
+ agent any
+
+
+ stages {
+
+
+  stage('Checkout') {
+
+    steps {
+
+      git 'https://github.com/Pathnex/sample-java-app.git'
+
+    }
+  }
+
+
+  stage('Build') {
+
+    steps {
+
+      sh '''
+      mvn -Dmaven.repo.local=.m2/repository clean package
+      '''
+
+    }
+  }
+
+
+  stage('Test') {
+
+    steps {
+
+      sh 'mvn test'
+
+    }
+  }
+
+ }
+
+}
+
+
+
+=================================================
+GITLAB CI
+=================================================
+
+stages:
+
+ - build
+ - test
+
+
+cache:
+
+ paths:
+
+  - .m2/repository
+
+
+
+build:
+
+ image: maven:3.9-eclipse-temurin-17
+
+ stage: build
+
+
+ script:
+
+  - mvn clean compile
+
+
+
+test:
+
+ image: maven:3.9-eclipse-temurin-17
+
+ stage: test
+
+
+ script:
+
+  - mvn test

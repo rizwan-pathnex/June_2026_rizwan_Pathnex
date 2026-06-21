@@ -1,0 +1,10 @@
+#What I Did Today**
+
+
+* Tried to create an EKS cluster manually and using Terraform.
+* Watched Pathnex Kubernetes Class 2 and 3 video.
+
+#Tomorrow’s Task*
+
+* Learn Kubernetes architecture and practice it thoroughly.
+* Need hard work with into video
