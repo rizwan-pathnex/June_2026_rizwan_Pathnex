@@ -1,0 +1,245 @@
+
+# Day 12 - File Content, RDS Skeleton, Rolling Update,
+
+# Backup, Multi-Branch Pipelines
+
+# ==================================================
+
+# ==================================================
+
+# Ansible - Create File and Add Content
+
+# ==================================================
+
+---
+
+* name: Create config file for Pathnex
+  hosts: all
+  become: yes
+
+  tasks:
+
+  * name: Write content to file
+    copy:
+    dest: /etc/pathnex.conf
+    content: |
+    Welcome to Pathnex DevOps Training
+    Today is Day 12
+
+# Notes:
+
+# copy module creates the file if it does not exist.
+
+# content option writes text directly into the file.
+
+# become: yes runs tasks with sudo privileges.
+
+# ==================================================
+
+# Terraform - AWS RDS MySQL Database
+
+# ==================================================
+
+resource "aws_db_instance" "PathnexRDS" {
+
+# Database storage size in GB
+
+allocated_storage = 20
+
+# Database engine
+
+engine = "mysql"
+
+# RDS instance type
+
+instance_class = "db.t3.micro"
+
+# Database name
+
+db_name = "pathnexdb"
+
+# Master username
+
+username = "admin"
+
+# Master password
+
+password = "password123"
+
+# Skip final snapshot during deletion
+
+skip_final_snapshot = true
+}
+
+# Notes:
+
+# RDS = Relational Database Service.
+
+# db.t3.micro is eligible for free tier in some AWS accounts.
+
+# Never hardcode passwords in production.
+
+# ==================================================
+
+# Kubernetes - Rolling Update Deployment
+
+# ==================================================
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+name: pathnex-rolling
+
+spec:
+replicas: 3
+
+strategy:
+type: RollingUpdate
+
+```
+rollingUpdate:
+  maxSurge: 1
+  maxUnavailable: 1
+```
+
+selector:
+matchLabels:
+app: roll
+
+template:
+metadata:
+labels:
+app: roll
+
+```
+spec:
+  containers:
+  - name: web
+    image: nginx
+```
+
+# Notes:
+
+# RollingUpdate updates pods gradually.
+
+# maxSurge: 1 allows one extra pod during update.
+
+# maxUnavailable: 1 allows one pod to be unavailable.
+
+# Zero downtime deployment strategy.
+
+# ==================================================
+
+# Shell Script - Backup Directory
+
+# ==================================================
+
+#!/bin/bash
+
+# Source directory
+
+SOURCE="/var/log"
+
+# Backup destination file
+
+DEST="/backup/pathnex-$(date +%F).tar.gz"
+
+# Create compressed backup
+
+tar -czf $DEST $SOURCE
+
+# Display success message
+
+echo "Backup created at: $DEST"
+
+# Notes:
+
+# tar = archive utility.
+
+# -c create archive
+
+# -z gzip compression
+
+# -f specify output file
+
+# $(date +%F) generates YYYY-MM-DD format.
+
+# ==================================================
+
+# Jenkins Pipeline - Multi Branch Pipeline
+
+# ==================================================
+
+pipeline {
+
+```
+agent any
+
+environment {
+
+    # Global environment variable
+    INSTITUTE_NAME = "Pathnex"
+}
+
+stages {
+
+    stage('Checkout') {
+
+        steps {
+            checkout scm
+        }
+    }
+
+    stage('Build') {
+
+        steps {
+            sh 'mvn clean compile'
+        }
+    }
+}
+```
+
+}
+
+# Notes:
+
+# checkout scm pulls source code from configured repository.
+
+# mvn clean compile compiles Java source code.
+
+# Multi-branch pipelines automatically build different branches.
+
+# ==================================================
+
+# GitLab CI - Branch Specific Jobs
+
+# ==================================================
+
+stages:
+
+* build
+
+# Runs only on main branch
+
+build-main:
+stage: build
+image: maven:3.8.1-jdk-17
+
+script:
+- mvn clean compile
+
+only:
+- main
+
+# Runs only on dev branch
+
+build-dev:
+stage: build
+image: maven:3.8.1-jdk-17
+
+script:
+- mvn clean compile
+
+only:
+- dev
