@@ -1,0 +1,9 @@
+* Learned about grafana,promethius,eks
+* Prepared an introduction video.
+* Tried to create an EKS cluster manually and using Terraform.
+* Watched Pathnex terrafrom class 1 and 2 and Kubernetes Class 2 video.
+
+#Tomorrow’s Task*
+
+* Learn Kubernetes architecture and practice it thoroughly.
+* Need hard work with into video and theory

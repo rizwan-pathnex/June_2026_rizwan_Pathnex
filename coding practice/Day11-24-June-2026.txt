@@ -1,0 +1,135 @@
+# Day 11 - Database, Outputs, Sidecars, Functions
+
+## Ansible - Install MariaDB
+
+---
+- name: Install MariaDB for Pathnex
+  hosts: all
+  become: yes
+
+  tasks:
+    # Install MariaDB package
+    - name: Install MariaDB
+      yum:
+        name: mariadb-server
+        state: present
+
+    # Start and enable MariaDB service
+    - name: Start MariaDB
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+
+## Terraform - Output Public IP
+
+resource "aws_instance" "PathnexServer" {
+  ami           = "ami-0abcd1234abcd1234"
+  instance_type = "r5.2xlarge"
+
+  tags = {
+    Name = "Pathnex-Output-EC2"
+  }
+}
+
+# Display EC2 public IP after creation
+output "PathnexPublicIP" {
+  value = aws_instance.PathnexServer.public_ip
+}
+
+
+## Kubernetes - Sidecar Container
+
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: pathnex-sidecar
+
+spec:
+  containers:
+
+    # Main application container
+    - name: main
+      image: nginx
+
+    # Sidecar container
+    - name: sidecar
+      image: busybox
+      command: ["sh", "-c", "echo Sidecar running; sleep 3600"]
+
+
+## Shell Script - Function Example
+
+#!/bin/bash
+
+# Function definition
+greet() {
+  echo "Welcome to Pathnex DevOps Training"
+}
+
+# Call function
+greet
+
+
+## Jenkins Pipeline - Email Notifications
+
+pipeline {
+    agent any
+
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+    }
+
+    stages {
+
+        # Get source code
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+
+        # Build application
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+    }
+
+    # Send email after build
+    post {
+        success {
+            mail to: 'team@pathnex.com',
+                 subject: "SUCCESS: Build #${env.BUILD_NUMBER}",
+                 body: "Build completed successfully for ${INSTITUTE_NAME}"
+        }
+
+        failure {
+            mail to: 'team@pathnex.com',
+                 subject: "FAILURE: Build #${env.BUILD_NUMBER}",
+                 body: "Build failed for ${INSTITUTE_NAME}"
+        }
+    }
+}
+
+
+## GitLab CI - Notifications
+
+stages:
+  - build
+
+build:
+  stage: build
+  image: maven:3.8.1-jdk-17
+
+  script:
+    - git clone https://github.com/Pathnex/sample-java-app.git
+    - cd sample-java-app
+    - mvn clean package
+
+  after_script:
+    # Notification step
+    - echo "Sending notification email to team@pathnex.com"
