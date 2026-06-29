@@ -1,0 +1,9 @@
+Today Topic
+
+* Learned about security and its practical
+* Need to follow 4 thing for 10 days
+* Tried to create an EKS cluster manually only
+
+# Tomorrow’s Task
+
+* Learn Kubernetes architecture and wait for final result
