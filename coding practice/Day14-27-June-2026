@@ -1,0 +1,190 @@
+# Day 14 — MINI PROJECT
+
+Complete these steps.
+
+## 1. Terraform — Create EC2
+
+- VPC
+- Subnet
+- Internet Gateway
+- Route Table
+- EC2 (Choose any one: c5.xlarge, r5.2xlarge, r6i.4xlarge, c6i.8xlarge, c6a.12xlarge)
+
+```hcl
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+}
+
+resource "aws_subnet" "public" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main.id
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+}
+
+resource "aws_route_table_association" "public" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
+}
+
+resource "aws_instance" "ec2" {
+  ami           = "ami-12345678"
+  instance_type = "c5.xlarge"
+  subnet_id     = aws_subnet.public.id
+
+  tags = {
+    Name = "MiniProjectEC2"
+  }
+}
+```
+
+## 2. Ansible — Install Nginx and Deploy HTML
+
+```yaml
+---
+- name: Install Nginx and Deploy HTML
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: present
+
+    - name: Start Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Deploy HTML
+      copy:
+        dest: /usr/share/nginx/html/index.html
+        content: |
+          <h1>Welcome to Nginx</h1>
+```
+
+## 3. Kubernetes — Deployment and Service
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+
+spec:
+  selector:
+    app: nginx
+
+  ports:
+    - port: 80
+      targetPort: 80
+
+  type: NodePort
+```
+
+## 4. Shell — Print CPU, Memory, and Disk
+
+```bash
+#!/bin/bash
+
+echo "CPU Information"
+lscpu
+
+echo
+echo "Memory Information"
+free -h
+
+echo
+echo "Disk Information"
+df -h
+```
+
+# Scheduled Pipelines
+
+## Jenkins Pipeline — Scheduled Build
+
+```groovy
+pipeline {
+    agent any
+
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+    }
+
+    triggers {
+        cron('H 2 * * *')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+    }
+}
+```
+
+## GitLab CI — Scheduled Pipeline
+
+```yaml
+stages:
+  - build
+
+build:
+  stage: build
+  image: maven:3.8.1-jdk-17
+
+  script:
+    - git clone https://github.com/Pathnex/sample-java-app.git
+    - cd sample-java-app
+    - mvn clean package
+```
