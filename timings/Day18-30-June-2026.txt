@@ -1,0 +1,9 @@
+Today Topic
+
+* Learned about Argo CD
+* Prepared an introduction video.
+
+
+# Tomorrow’s Task
+
+* Learn Kubernetes architecture and practice it thoroughly and need to revise terraform therory
