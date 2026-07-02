@@ -1,0 +1,10 @@
+
+Today Topic
+
+* Learned about SRE
+* Prepared an introduction video.
+* Tried to create an EKS cluster manually only
+
+# Tomorrow’s Task
+
+* Learn Kubernetes architecture and practice it thoroughly and need to revise terraform
