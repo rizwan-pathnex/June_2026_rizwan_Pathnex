@@ -1,0 +1,5 @@
+# Today topic
+* Prepared an introduction video and EKS
+
+# Tomorrow Task
+* Need hard work with GCP
