@@ -1,0 +1,6 @@
+
+# Today topic
+* Prepared an introduction video and EKS with terraform. work on jenkins
+
+# Tomorrow Task
+* Need hard work with GCP and Azure
